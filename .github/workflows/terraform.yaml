@@ -1,0 +1,19 @@
+# Copyright 2024 Canonical Ltd.
+# See LICENSE file for licensing details.
+
+name: Check Terraform Modules
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  check-terraform-module:
+    name: Check Terraform Module
+    uses: canonical/sdcore-github-workflows/.github/workflows/terraform.yaml@v1.0.0
+    secrets: inherit
+    with:
+      working-directory: ./modules
