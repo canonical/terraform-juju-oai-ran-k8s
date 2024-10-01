@@ -84,9 +84,9 @@ resource "juju_integration" "du-logging" {
 # Cross-model integrations
 
 resource "juju_offer" "cu-fiveg-gnb-identity" {
-  model = var.model_name
+  model            = var.model_name
   application_name = module.cu.app_name
-  endpoint = module.cu.fiveg_gnb_identity_endpoint
+  endpoint         = module.cu.fiveg_gnb_identity_endpoint
 }
 
 resource "juju_integration" "prometheus" {

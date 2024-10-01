@@ -47,9 +47,9 @@ resource "juju_integration" "cu-logging" {
 # Cross-model integrations
 
 resource "juju_offer" "cu-fiveg-f1" {
-  model = var.model_name
+  model            = var.model_name
   application_name = module.cu.app_name
-  endpoint = module.cu.fiveg_f1_endpoint
+  endpoint         = module.cu.fiveg_f1_endpoint
 }
 
 resource "juju_integration" "prometheus" {
