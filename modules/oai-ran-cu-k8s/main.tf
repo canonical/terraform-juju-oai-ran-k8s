@@ -20,14 +20,6 @@ module "grafana-agent" {
   config     = var.grafana_agent_config
 }
 
-module "cos-lite" {
-  count                    = var.deploy_cos ? 1 : 0
-  source                   = "git::https://github.com/canonical/terraform-juju-sdcore//modules/external/cos-lite"
-  model_name               = var.cos_model_name
-  deploy_cos_configuration = true
-  cos_configuration_config = var.cos_configuration_config
-}
-
 # Integrations for `logging` endpoint
 
 resource "juju_integration" "cu-logging" {
@@ -50,32 +42,4 @@ resource "juju_offer" "cu-fiveg-f1" {
   model            = var.model_name
   application_name = module.cu.app_name
   endpoint         = module.cu.fiveg_f1_endpoint
-}
-
-resource "juju_integration" "prometheus" {
-  count = var.deploy_cos || var.use_existing_cos ? 1 : 0
-  model = var.model_name
-
-  application {
-    name     = module.grafana-agent.app_name
-    endpoint = module.grafana-agent.send_remote_write_endpoint
-  }
-
-  application {
-    offer_url = length(module.cos-lite) != 0 ? module.cos-lite[0].prometheus_remote_write_offer_url : var.prometheus_remote_write_offer_url
-  }
-}
-
-resource "juju_integration" "loki" {
-  count = var.deploy_cos || var.use_existing_cos ? 1 : 0
-  model = var.model_name
-
-  application {
-    name     = module.grafana-agent.app_name
-    endpoint = module.grafana-agent.logging_consumer_endpoint
-  }
-
-  application {
-    offer_url = length(module.cos-lite) != 0 ? module.cos-lite[0].loki_logging_offer_url : var.loki_logging_offer_url
-  }
 }
